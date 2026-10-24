@@ -154,6 +154,32 @@ select{font-family:var(--font-body);font-size:.85rem;padding:8px 11px;border-rad
 footer{border-top:1px solid var(--border);margin-top:56px;padding:30px 0 66px;color:var(--text-dim);font-size:.88rem}
 footer a{color:var(--green)}
 .src{font-family:var(--font-body);font-size:.78rem;line-height:1.95}
+
+/* --- safety tab --- */
+.caveat{background:var(--saffron-dim);border-left:4px solid var(--saffron);padding:16px 20px;margin:22px 0;font-size:.92rem;color:var(--ink)}
+.caveat strong{display:block;margin-bottom:5px;font-family:var(--font-display);font-size:1.02rem}
+.caveat ul{margin:8px 0 0;padding-left:20px}
+.tablewrap{overflow-x:auto;border:1px solid var(--border);margin-top:6px}
+.saftable{border-collapse:collapse;width:100%;font-size:.88rem;min-width:600px}
+.saftable th,.saftable td{padding:9px 12px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap}
+.saftable th:nth-child(1),.saftable td:nth-child(1),.saftable th:nth-child(2),.saftable td:nth-child(2){text-align:left}
+.saftable thead th{font-family:var(--font-body);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);cursor:pointer;user-select:none}
+.saftable thead th:hover{color:var(--ink)}
+.saftable tbody tr:hover{background:var(--surface-2)}
+.saftable tr.self{background:var(--green-dim)}
+.saftable tr.self td{color:var(--ink);font-weight:700}
+.safrow{display:grid;grid-template-columns:140px 1fr 74px;gap:10px;align-items:center;font-size:.85rem;padding:3px 0}
+.safrow .nm{color:var(--ink);overflow:hidden;text-overflow:ellipsis}
+.safrow .t{height:18px;background:var(--surface-2);border:1px solid var(--border);overflow:hidden}
+.safrow .f{height:100%;background:var(--saffron);opacity:.7;transition:width .6s cubic-bezier(.22,.7,.3,1)}
+.safrow .vv{font-family:var(--font-mono);font-size:.78rem;text-align:right;color:var(--text-dim);font-variant-numeric:tabular-nums}
+.safrow.self{font-weight:700}
+.safrow.self .f{background:var(--green);opacity:1}
+.safrow.self .nm{color:var(--green)}
+.mini{margin-bottom:16px}
+.mini .minit{font-family:var(--font-body);font-size:.8rem;font-weight:600;color:var(--ink);margin-bottom:2px}
+.mini .minisub{font-family:var(--font-body);font-size:.72rem;color:var(--text-dim);margin-bottom:6px}
+
 </style>
 </head>
 <body>
@@ -164,7 +190,7 @@ footer a{color:var(--green)}
       <span class="badge">Open data · no API keys</span>
       <span class="badge live"><span class="pulse"></span>Live air quality</span>
       <span class="badge">1950 → today</span>
-      <span class="badge" title="theme revision">theme v4</span>
+      <span class="badge" title="theme revision">theme v5</span>
     </div>
     <h1 class="title">India, <em>in data</em>.</h1>
     <p class="sub">How much hotter has your city become since 1950? What is the air like there right now?
@@ -185,6 +211,7 @@ footer a{color:var(--green)}
   <button data-tab="climate" class="active"><span class="ic">01</span> Climate</button>
   <button data-tab="air"><span class="ic">02</span> Air quality</button>
   <button data-tab="economy"><span class="ic">03</span> Economy</button>
+  <button data-tab="safety"><span class="ic">04</span> Women’s safety</button>
 </nav>
 
 <main class="wrap">
@@ -279,6 +306,72 @@ footer a{color:var(--green)}
       </div>
     </div>
   </section>
+
+  <!-- ===== SAFETY ===== -->
+  <section class="panel" id="p-safety">
+    <div class="panel-head">
+      <div>
+        <h2>Women&rsquo;s safety &mdash; what the data can and cannot say</h2>
+        <p>Comparing countries on violence against women is genuinely hard: different laws, different reporting,
+        different definitions. Below is a provisional 50-country working table, alongside live World Bank indicators
+        on the same topic.</p>
+      </div>
+    </div>
+
+    <div class="caveat">
+      <strong>Read this first: these figures are provisional, not a verified ranking.</strong>
+      The 50-country numbers come from a working analysis and have <em>not</em> been independently audited against the
+      primary source tables. Prevalence counts the share of women affected <em>at least once in a year</em> &mdash; not
+      the number of criminal incidents &mdash; so it must not be compared with police-recorded case counts. Ranks are
+      indicative only, and depend on survey method, reference year and definitions.
+    </div>
+
+    <div class="card">
+      <h3>India at a glance</h3>
+      <p class="cap">Provisional working figures from the analysis (see the note above).</p>
+      <div class="stats" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat"><div class="k">Past-year IPV prevalence</div><div class="v hot">22.4%</div></div>
+        <div class="stat"><div class="k">Rank of 50 selected</div><div class="v">7th highest</div></div>
+        <div class="stat"><div class="k">Registered cases / 100k women</div><div class="v">64.6</div></div>
+        <div class="stat"><div class="k">Rule of law score</div><div class="v">0.49</div></div>
+      </div>
+      <p class="cap" style="margin:16px 0 0">Registered cases reflect India&rsquo;s NCRB 2024 working figures
+      (441,534 cases over an estimated 683.3&nbsp;million women) &mdash; a <em>recorded</em> count, not underlying incidence.
+      The rule-of-law score is a general institutions index, not a women-specific enforcement measure.</p>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Live: reported prevalence, worldwide</h3>
+        <p class="cap" id="safLiveCap">Live &middot; World Bank &middot; latest available year per country</p>
+        <div id="safLiveList"><div class="loading"><span class="spin"></span> loading live data&hellip;</div></div>
+      </div>
+      <div class="card">
+        <h3>Live: India, structural indicators</h3>
+        <p class="cap">Live &middot; World Bank &mdash; context, not a measure of violence.</p>
+        <div id="safIndWrap"><div class="loading"><span class="spin"></span> loading live data&hellip;</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>The 50-country working table</h3>
+      <p class="cap">Provisional. Click any column header to sort. India is highlighted.</p>
+      <div class="tablewrap" id="safTableWrap"></div>
+    </div>
+
+    <div class="card">
+      <h3>Why these numbers are hard to compare</h3>
+      <ul style="margin:0;padding-left:20px;font-size:.92rem">
+        <li><strong>No single definition.</strong> Rape, domestic violence, harassment, trafficking and femicide are different indicators.</li>
+        <li><strong>Prevalence is not incidents.</strong> A survey counts women affected; police records may count several offences per woman.</li>
+        <li><strong>Underreporting varies</strong> by country and by offence, and cannot be estimated by dividing by an index.</li>
+        <li><strong>Different denominators.</strong> Ever-partnered women aged 15&ndash;49 are not all women of all ages.</li>
+        <li><strong>Years differ.</strong> Modelled prevalence, national police records and institutional scores describe different periods.</li>
+        <li><strong>Uncertainty matters.</strong> Where confidence intervals overlap, exact ranks are not meaningful.</li>
+      </ul>
+    </div>
+  </section>
+
 </main>
 
 <footer class="wrap">
@@ -654,6 +747,114 @@ function boot(){
     if(climateCache[state.city]) loadClimate(state.city);
   });
 }
+
+/* ================= safety tab ================= */
+const SAFETY = [
+  {r:1,c:"Sierra Leone",ipv:41.0,rl:0.44},{r:2,c:"Afghanistan",ipv:39.7,rl:0.31},
+  {r:3,c:"DR Congo",ipv:33.2,rl:0.34},{r:4,c:"Uganda",ipv:24.2,rl:0.38},
+  {r:5,c:"Tanzania",ipv:23.8,rl:0.46},{r:6,c:"Dominican Republic",ipv:22.8,rl:0.50},
+  {r:7,c:"India",ipv:22.4,rl:0.49},{r:8,c:"Morocco",ipv:21.6,rl:0.48},
+  {r:9,c:"Malawi",ipv:20.9,rl:0.52},{r:10,c:"Ethiopia",ipv:20.1,rl:0.36},
+  {r:11,c:"Nigeria",ipv:19.6,rl:0.41},{r:12,c:"Rwanda",ipv:18.4,rl:0.63},
+  {r:13,c:"Egypt",ipv:17.2,rl:0.35},{r:14,c:"Bangladesh",ipv:15.7,rl:0.39},
+  {r:15,c:"Bolivia",ipv:15.2,rl:0.37},{r:16,c:"Colombia",ipv:14.8,rl:0.47},
+  {r:17,c:"Kenya",ipv:14.6,rl:0.45},{r:18,c:"Thailand",ipv:14.3,rl:0.50},
+  {r:19,c:"Ghana",ipv:13.4,rl:0.54},{r:20,c:"T\u00fcrkiye",ipv:13.3,rl:0.41},
+  {r:21,c:"Pakistan",ipv:13.1,rl:0.37},{r:22,c:"Nepal",ipv:12.3,rl:0.52},
+  {r:23,c:"Vietnam",ipv:11.2,rl:0.50},{r:24,c:"South Africa",ipv:10.6,rl:0.56},
+  {r:25,c:"Argentina",ipv:10.6,rl:0.54},{r:26,c:"Romania",ipv:10.6,rl:0.61},
+  {r:27,c:"China",ipv:10.6,rl:0.48},{r:28,c:"Canada",ipv:8.5,rl:0.79},
+  {r:29,c:"South Korea",ipv:8.4,rl:0.74},{r:30,c:"Sri Lanka",ipv:8.0,rl:0.51},
+  {r:31,c:"Peru",ipv:8.0,rl:0.48},{r:32,c:"United States",ipv:7.4,rl:0.68},
+  {r:33,c:"Guatemala",ipv:7.2,rl:0.44},{r:34,c:"Mexico",ipv:7.0,rl:0.40},
+  {r:35,c:"Netherlands",ipv:5.2,rl:0.82},{r:36,c:"Germany",ipv:4.7,rl:0.83},
+  {r:37,c:"Sweden",ipv:4.3,rl:0.85},{r:38,c:"United Kingdom",ipv:4.0,rl:0.78},
+  {r:39,c:"Japan",ipv:3.7,rl:0.78},{r:40,c:"Indonesia",ipv:3.6,rl:0.52},
+  {r:41,c:"France",ipv:3.4,rl:0.72},{r:42,c:"Denmark",ipv:2.9,rl:0.90},
+  {r:43,c:"Italy",ipv:2.8,rl:0.66},{r:44,c:"Finland",ipv:2.7,rl:0.87},
+  {r:45,c:"Singapore",ipv:2.6,rl:0.78},{r:46,c:"Brazil",ipv:2.4,rl:0.50},
+  {r:47,c:"Spain",ipv:2.4,rl:0.71},{r:48,c:"Australia",ipv:1.8,rl:0.80},
+  {r:49,c:"Poland",ipv:1.7,rl:0.66},{r:50,c:"New Zealand",ipv:1.2,rl:0.83},
+];
+let safSort="ipv", safDone=false;
+
+function renderSafetyTable(){
+  const key=safSort, dir=(key==="rl")?1:-1;
+  const rows=[...SAFETY].sort((a,b)=>(a[key]-b[key])*dir);
+  let h='<table class="saftable"><thead><tr>'+
+    '<th data-k="r">Rank</th><th data-k="c">Country</th><th data-k="ipv">IPV % / year</th>'+
+    '<th data-k="per">Affected / 100k / yr</th><th data-k="rl">Rule of law (0&ndash;1)</th></tr></thead><tbody>';
+  for(const x of rows){
+    const self=x.c==="India"?" class=\"self\"":"";
+    h+=`<tr${self}><td>${x.r}</td><td>${x.c}</td><td>${x.ipv.toFixed(1)}%</td>`+
+       `<td>${(x.ipv*1000).toLocaleString("en-IN")}</td><td>${x.rl.toFixed(2)}</td></tr>`;
+  }
+  h+='</tbody></table>';
+  const w=document.getElementById("safTableWrap"); w.innerHTML=h;
+  w.querySelectorAll("thead th").forEach(th=>th.onclick=()=>{
+    const k=th.dataset.k;
+    if(k==="per") safSort="ipv"; else safSort=k;
+    renderSafetyTable();
+  });
+}
+
+async function loadSafety(){
+  renderSafetyTable();
+  if(safDone) return;
+  safDone=true;
+  // live 1: World Bank VAW prevalence, all countries, latest value
+  try{
+    const raw=await getJSON("https://api.worldbank.org/v2/country/all/indicator/SG.VAW.1549.ZS?format=json&per_page=400&mrnev=1");
+    const rows=(raw[1]||[]).filter(r=>r.value!=null).map(r=>({n:r.country.value,v:r.value,y:r.date,iso:r.countryiso3code}));
+    rows.sort((a,b)=>b.v-a.v);
+    const top=rows.slice(0,18);
+    const india=rows.find(r=>r.iso==="IND");
+    const list=india && !top.find(r=>r.iso==="IND") ? top.concat([india]) : top;
+    const mx=Math.max(...list.map(r=>r.v));
+    let h="";
+    for(const r of list){
+      const self=r.iso==="IND"?" self":"";
+      h+=`<div class="safrow${self}"><div class="nm">${r.n} <span style="color:var(--text-dim);font-weight:400">(${r.y})</span></div>`+
+         `<div class="t"><div class="f" style="width:${(r.v/mx*100).toFixed(1)}%"></div></div>`+
+         `<div class="vv">${r.v.toFixed(1)}%</div></div>`;
+    }
+    document.getElementById("safLiveList").innerHTML=h;
+    document.getElementById("safLiveCap").textContent=
+      `Live \u00b7 World Bank \u00b7 ${rows.length} countries with data \u00b7 latest available year per country`+
+      (india?` \u00b7 India: ${india.v}% (${india.y})`:"");
+  }catch(e){
+    document.getElementById("safLiveList").innerHTML=`<div class="err">Could not load live data (${e.message}).</div>`;
+  }
+  // live 2: India structural indicators
+  const IND=[
+    {id:"SG.GEN.PARL.ZS", t:"Women in national parliament", u:"% of seats"},
+    {id:"SL.TLF.CACT.FE.ZS", t:"Female labour force participation", u:"% of women 15+"},
+    {id:"SP.DYN.LE00.FE.IN", t:"Female life expectancy", u:"years"},
+  ];
+  const wrap=document.getElementById("safIndWrap"); wrap.innerHTML="";
+  for(const it of IND){
+    const box=document.createElement("div"); box.className="mini";
+    box.innerHTML=`<div class="minit">${it.t}</div><div class="minisub">${it.u}</div><div class="chart"><div class="loading"><span class="spin"></span> loading\u2026</div></div>`;
+    wrap.appendChild(box);
+    try{
+      const raw=await getJSON(`https://api.worldbank.org/v2/country/IND/indicator/${it.id}?format=json&per_page=200`);
+      const rows=(raw[1]||[]).filter(r=>r.value!=null).map(r=>({x:+r.date,y:r.value})).sort((a,b)=>a.x-b.x);
+      if(!rows.length){ box.querySelector(".chart").innerHTML='<div class="err">No data.</div>'; continue; }
+      const last=rows[rows.length-1];
+      lineChart(box.querySelector(".chart"), rows, {height:150, padL:42,
+        yFmt:v=>v.toFixed(0)+(it.id==="SP.DYN.LE00.FE.IN"?"":""), xLabel:x=>x+" \u00b7 "+last.y.toFixed(1)});
+      const sub=document.createElement("div"); sub.className="minisub";
+      sub.style.marginTop="4px";
+      sub.innerHTML=`Latest: <b style="color:var(--ink)">${last.y.toFixed(1)}</b> (${last.x})`;
+      box.appendChild(sub);
+    }catch(e){ box.querySelector(".chart").innerHTML=`<div class="err">Could not load.</div>`; }
+  }
+}
+document.getElementById("tabs").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-tab]");
+  if(b && b.dataset.tab==="safety") loadSafety();
+});
+
 document.addEventListener("DOMContentLoaded",boot);
 </script>
 </body>
